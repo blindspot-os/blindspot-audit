@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vital Efficiency Audit — Blind Spot</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f2a44;
+    --navy-mid: #0a1f33;
+    --navy-light: #1a3a5c;
+    --gold: #c8a96a;
+    --gold-light: #dfc088;
+    --gold-dim: rgba(201,168,76,0.12);
+    --white: #f7f7f5;
+    --gray: #8a9ab0;
+    --gray-dim: rgba(138,154,176,0.12);
+    --red: #e05c5c;
+    --green: #5ce0a0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SCREEN MANAGEMENT */
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ─── CONTEXT SCREEN ─── */
+  #screen-context {
+    align-items: center;
+    justify-content: center;
+    padding: 60px 32px;
+    position: relative;
+  }
+
+  #screen-context::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .context-inner {
+    max-width: 600px;
+    width: 100%;
+  }
+
+  .context-brand {
+    font-size: 9px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 56px;
+    text-align: center;
+  }
+
+  .context-statement {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .context-statement + .context-statement {
+    margin-top: 28px;
+  }
+
+  .context-statement strong {
+    color: var(--gold-light);
+    font-weight: 400;
+  }
+
+  .context-divider {
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.3;
+    margin: 36px 0;
+  }
+
+  .context-bridge {
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: var(--gray);
+    line-height: 1.8;
+    margin-bottom: 48px;
+  }
+
+  .context-bridge em {
+    color: var(--white);
+    font-style: normal;
+  }
+
+  .context-cta-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.6;
+    margin-bottom: 16px;
+  }
+
+  /* ─── INTRO SCREEN ─── */
+  #screen-intro {
+    align-items: center;
+    justify-content: center;
+    padding: 60px 32px;
+    text-align: center;
+    position: relative;
+  }
+
+  #screen-intro::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .intro-inner { max-width: 640px; }
+
+  .brand-mark {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 48px;
+    opacity: 0.8;
+  }
+
+  .audit-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 24px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .intro-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+    margin: 28px auto;
+    opacity: 0.4;
+  }
+
+  .intro-hook {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+
+  .intro-hook strong {
+    color: var(--gold-light);
+    font-weight: 400;
+  }
+
+  .intro-sub {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--gray);
+    line-height: 1.8;
+    margin-bottom: 48px;
+  }
+
+  .meta-row {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+
+  .meta-item {
+    text-align: center;
+  }
+
+  .meta-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .meta-label {
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 16px 40px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+
+  .btn-primary:hover {
+    background: var(--gold-dim);
+    color: var(--gold-light);
+  }
+
+  /* ─── QUESTION SCREEN ─── */
+  #screen-questions {
+    padding: 0;
+  }
+
+  .q-header {
+    padding: 24px 40px;
+    border-bottom: 1px solid var(--gray-dim);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .q-brand {
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+
+  .progress-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .progress-bar {
+    width: 120px;
+    height: 1px;
+    background: var(--gray-dim);
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .progress-text {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--gray);
+  }
+
+  .q-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+  }
+
+  .question-card {
+    max-width: 680px;
+    width: 100%;
+  }
+
+  .q-indicator {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.6;
+    margin-bottom: 16px;
+  }
+
+  .q-area {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 20px;
+  }
+
+  .q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1.4;
+    color: var(--white);
+    margin-bottom: 28px;
+  }
+
+  .q-anchor {
+    background: var(--gold-dim);
+    border-left: 2px solid var(--gold);
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    border-radius: 0 2px 2px 0;
+  }
+
+  .q-anchor-label {
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+    opacity: 0.8;
+  }
+
+  .q-anchor-text {
+    font-size: 11px;
+    color: var(--gray);
+    line-height: 1.7;
+    letter-spacing: 0.3px;
+  }
+
+  .q-anchor-text em {
+    color: var(--white);
+    font-style: normal;
+  }
+
+  /* Slider */
+  .slider-section { margin-bottom: 32px; }
+
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .slider-label {
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .slider-wrapper {
+    position: relative;
+    padding: 8px 0;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 1px;
+    background: var(--gray-dim);
+    border-radius: 0;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--navy);
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    margin-top: -10px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 4px var(--gold-dim);
+  }
+
+  input[type="range"]::-moz-range-track {
+    height: 1px;
+    background: var(--gray-dim);
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--navy);
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+  }
+
+  .score-display {
+    text-align: center;
+    margin-top: 16px;
+  }
+
+  .score-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    transition: color 0.3s;
+  }
+
+  .score-label {
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-top: 4px;
+  }
+
+  /* Score dots */
+  .score-dots {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding: 0 2px;
+  }
+
+  .score-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gray-dim);
+    transition: background 0.2s;
+  }
+
+  .score-dot.active { background: var(--gold); }
+
+  .q-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    padding-top: 8px;
+  }
+
+  .btn-next {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 12px 32px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .btn-next:hover {
+    background: var(--gold-dim);
+  }
+
+  .btn-back {
+    background: transparent;
+    border: 1px solid var(--gray-dim);
+    color: var(--gray);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .btn-back:hover { border-color: var(--gray); }
+
+  /* ─── RESULTS SCREEN ─── */
+  #screen-results {
+    align-items: center;
+    justify-content: flex-start;
+    padding: 60px 32px;
+    position: relative;
+  }
+
+  #screen-results::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .results-inner {
+    max-width: 680px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .results-brand {
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 40px;
+  }
+
+  .score-reveal {
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--gray-dim);
+  }
+
+  .score-reveal-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 12px;
+  }
+
+  .score-reveal-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .score-reveal-bar {
+    height: 2px;
+    background: var(--gray-dim);
+    margin: 20px 0;
+    position: relative;
+  }
+
+  .score-reveal-fill {
+    height: 100%;
+    transition: width 1s ease;
+    width: 0%;
+  }
+
+  .score-zones {
+    display: flex;
+    gap: 0;
+    margin-top: 8px;
+  }
+
+  .score-zone {
+    flex: 1;
+    text-align: center;
+    font-size: 7px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gray);
+    padding-top: 8px;
+    border-top: 1px solid transparent;
+    transition: all 0.3s;
+  }
+
+  .score-zone.active-zone {
+    color: var(--white);
+    border-top-color: currentColor;
+  }
+
+  .result-status {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    display: inline-block;
+    border: 1px solid;
+  }
+
+  .result-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    line-height: 1.3;
+    margin-bottom: 20px;
+  }
+
+  .result-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .result-body strong {
+    color: var(--gold-light);
+    font-weight: 400;
+  }
+
+  /* Individual scores */
+  .individual-scores {
+    margin: 40px 0;
+    padding: 28px;
+    background: var(--navy-mid);
+    border: 1px solid var(--gray-dim);
+  }
+
+  .ind-scores-title {
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 20px;
+  }
+
+  .ind-score-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  .ind-score-row:last-child { margin-bottom: 0; }
+
+  .ind-score-label {
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--gray);
+    width: 180px;
+    flex-shrink: 0;
+  }
+
+  .ind-score-bar-wrap {
+    flex: 1;
+    height: 1px;
+    background: var(--gray-dim);
+    position: relative;
+  }
+
+  .ind-score-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    transition: width 1s ease;
+    width: 0%;
+  }
+
+  .ind-score-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--gold);
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Close section */
+  .result-close {
+    padding: 36px;
+    background: var(--navy-mid);
+    border: 1px solid rgba(201,168,76,0.2);
+    margin-top: 40px;
+  }
+
+  .close-eyebrow {
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    opacity: 0.8;
+  }
+
+  .close-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    line-height: 1.4;
+    margin-bottom: 16px;
+    color: var(--white);
+  }
+
+  .close-body {
+    font-size: 11px;
+    color: var(--gray);
+    line-height: 1.9;
+    margin-bottom: 28px;
+    letter-spacing: 0.3px;
+  }
+
+  .close-body em {
+    color: var(--white);
+    font-style: normal;
+  }
+
+  .protocol-details {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 28px;
+    padding: 16px 0;
+    border-top: 1px solid var(--gray-dim);
+    border-bottom: 1px solid var(--gray-dim);
+  }
+
+  .protocol-detail {
+    text-align: center;
+    flex: 1;
+  }
+
+  .pd-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .pd-label {
+    font-size: 7px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .btn-protocol {
+    display: block;
+    width: 100%;
+    background: var(--gold);
+    border: none;
+    color: var(--navy);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 18px 32px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .btn-protocol:hover {
+    background: var(--gold-light);
+  }
+
+  /* Sovereignty result special styling */
+  .sovereignty-note {
+    padding: 20px 24px;
+    border: 1px solid rgba(92,224,160,0.2);
+    background: rgba(92,224,160,0.04);
+    margin-top: 28px;
+  }
+
+  .sovereignty-note-text {
+    font-size: 10px;
+    color: var(--gray);
+    line-height: 1.8;
+    letter-spacing: 0.3px;
+  }
+
+  /* Transitions */
+  .fade-in {
+    animation: fadeIn 0.5s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 36px; }
+    .q-text { font-size: 22px; }
+    .score-reveal-number { font-size: 60px; }
+    .result-title { font-size: 28px; }
+    .q-header { padding: 16px 20px; }
+    .q-body { padding: 40px 20px; }
+    .individual-scores { padding: 20px; }
+    .ind-score-label { width: 120px; font-size: 8px; }
+    .protocol-details { flex-direction: column; gap: 12px; }
+    #screen-intro { padding: 40px 20px; }
+    #screen-results { padding: 40px 20px; }
+  }
+</style>
+<script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
+</head>
+<body>
+
+<!-- ═══ CONTEXT SCREEN ═══ -->
+<div id="screen-context" class="screen active">
+  <div class="context-inner">
+    <div class="context-brand">Blind Spot</div>
+
+    <p class="context-statement">
+      You've tried the systems.<br>
+      You understood them better than most.<br>
+      <strong>And something still didn't move.</strong>
+    </p>
+
+    <div class="context-divider"></div>
+
+    <p class="context-statement">
+      It's not that you lack information.<br>
+      It's not effort.<br>
+      It's not discipline.
+    </p>
+
+    <div class="context-divider"></div>
+
+    <p class="context-statement">
+      There's a structure running underneath your behavior —<br>
+      deciding what you're allowed to have,<br>
+      pulling you back every time you get close.<br><br>
+      <strong>Most people never see it.<br>
+      Because it looks exactly like who they are.</strong>
+    </p>
+
+    <div class="context-divider"></div>
+
+    <p class="context-bridge">
+      This audit measures <em>four specific indicators</em> that map that structure.<br>
+      It's not a personality test. It's not motivational content.<br>
+      It's a diagnostic — and it only works if you answer honestly.
+    </p>
+
+    <div class="context-cta-label">4 indicators · less than 3 minutes</div>
+    <button class="btn-primary" onclick="showScreen('screen-intro')">Run the Audit →</button>
+  </div>
+</div>
+
+
+<!-- ═══ INTRO SCREEN ═══ -->
+<div id="screen-intro" class="screen">
+  <div class="intro-inner">
+    <div class="brand-mark">Blind Spot</div>
+    <div class="audit-title">Vital Efficiency Audit — V.4.0</div>
+    <h1>Technical analysis of <em>what's actually blocking you</em></h1>
+    <div class="intro-divider"></div>
+    <p class="intro-hook">
+      If you're capable and still not where you should be —<br>
+      you don't have a capability problem.<br><br>
+      You have a <strong>structural one.</strong><br><br>
+      This audit identifies exactly where your system is losing output — and why.
+    </p>
+    <p class="intro-sub">Less than 3 minutes. Answer honestly.</p>
+    <div class="meta-row">
+      <div class="meta-item">
+        <div class="meta-num">4</div>
+        <div class="meta-label">Indicators</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-num">3'</div>
+        <div class="meta-label">Minutes</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-num">1</div>
+        <div class="meta-label">Diagnosis</div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="startAudit()">Begin Audit</button>
+  </div>
+</div>
+
+<!-- ═══ QUESTIONS SCREEN ═══ -->
+<div id="screen-questions" class="screen">
+  <div class="q-header">
+    <div class="q-brand">Blind Spot — Vital Efficiency Audit</div>
+    <div class="progress-container">
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="progress-text" id="progress-text">1 / 4</div>
+    </div>
+  </div>
+  <div class="q-body">
+    <div class="question-card fade-in" id="question-card">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ═══ RESULTS SCREEN ═══ -->
+<div id="screen-results" class="screen">
+  <div class="results-inner">
+    <div class="results-brand">Blind Spot — Audit Results</div>
+    <div class="score-reveal">
+      <div class="score-reveal-label">Your Efficiency Index</div>
+      <div class="score-reveal-number" id="result-score-number">—</div>
+      <div class="score-reveal-bar">
+        <div class="score-reveal-fill" id="result-score-fill"></div>
+      </div>
+      <div class="score-zones">
+        <div class="score-zone" id="zone-critical">Below 40<br>Critical Friction</div>
+        <div class="score-zone" id="zone-armed">40—69<br>Armed Identity</div>
+        <div class="score-zone" id="zone-sovereign">70—100<br>Sovereignty</div>
+      </div>
+    </div>
+
+    <div id="result-content">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="individual-scores">
+      <div class="ind-scores-title">Indicator Breakdown</div>
+      <div class="ind-score-row">
+        <div class="ind-score-label">A. Effort / Reward</div>
+        <div class="ind-score-bar-wrap"><div class="ind-score-bar-fill" id="bar-a"></div></div>
+        <div class="ind-score-val" id="val-a">—</div>
+      </div>
+      <div class="ind-score-row">
+        <div class="ind-score-label">B. Decisional Autonomy</div>
+        <div class="ind-score-bar-wrap"><div class="ind-score-bar-fill" id="bar-b"></div></div>
+        <div class="ind-score-val" id="val-b">—</div>
+      </div>
+      <div class="ind-score-row">
+        <div class="ind-score-label">C. Internal Resistance</div>
+        <div class="ind-score-bar-wrap"><div class="ind-score-bar-fill" id="bar-c"></div></div>
+        <div class="ind-score-val" id="val-c">—</div>
+      </div>
+      <div class="ind-score-row">
+        <div class="ind-score-label">D. Clarity of Sovereignty</div>
+        <div class="ind-score-bar-wrap"><div class="ind-score-bar-fill" id="bar-d"></div></div>
+        <div class="ind-score-val" id="val-d">—</div>
+      </div>
+    </div>
+
+    <div class="result-close" id="result-close">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+<script>
+  const questions = [
+    {
+      id: 'a',
+      indicator: 'Indicator A',
+      area: 'Effort / Reward Ratio',
+      text: 'Are your results proportional to the energy you\'re putting in?',
+      anchor: 'In the last 90 days, have you been working at full capacity while results stayed <em>frustratingly flat?</em> If yes, rate this low.',
+      low: 'Total Blockage',
+      high: 'Total Flow'
+    },
+    {
+      id: 'b',
+      indicator: 'Indicator B',
+      area: 'Decision Autonomy',
+      text: 'Do your decisions come from your own agenda — or from managing what others need from you?',
+      anchor: 'In the last 30 days, how many times did you drop your own priorities because <em>someone else\'s urgency felt more important than yours?</em> If it happened more than once, rate this low.',
+      low: 'Total Blockage',
+      high: 'Total Flow'
+    },
+    {
+      id: 'c',
+      indicator: 'Indicator C',
+      area: 'Internal Resistance',
+      text: 'When you sit down to work on something that\'s purely yours — how fast does something else appear?',
+      anchor: 'When you sit down to work on your own project, your own vision — <em>how quickly does something more urgent show up?</em> If it happens within minutes, rate this low.',
+      low: 'Total Blockage',
+      high: 'Total Flow'
+    },
+    {
+      id: 'd',
+      indicator: 'Indicator D',
+      area: 'Identity Independence',
+      text: 'When you have nothing to solve, nothing to produce, and no one who needs you — do you feel at ease, or does something push you to generate a new problem?',
+      anchor: 'Think of the last time you had unstructured time with no external demands. <em>Did you rest — or did you find yourself creating urgency, checking things, or feeling vaguely uncomfortable with the absence of pressure?</em> If discomfort appeared, rate this low.',
+      low: 'Total Blockage',
+      high: 'Total Flow'
+    }
+  ];
+
+  let scores = { a: 5, b: 5, c: 5, d: 5 };
+  let currentQ = 0;
+
+  function startAudit() {
+    showScreen('screen-questions');
+    renderQuestion(0);
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function renderQuestion(index) {
+    const q = questions[index];
+    const card = document.getElementById('question-card');
+    const fill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+
+    fill.style.width = ((index) / questions.length * 100) + '%';
+    progressText.textContent = (index + 1) + ' / ' + questions.length;
+
+    const currentScore = scores[q.id];
+
+    card.innerHTML = `
+      <div class="q-indicator">${q.indicator} of 4</div>
+      <div class="q-area">${q.area}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="q-anchor">
+        <div class="q-anchor-label">Behavioral Anchor</div>
+        <div class="q-anchor-text">${q.anchor}</div>
+      </div>
+      <div class="slider-section">
+        <div class="slider-labels">
+          <span class="slider-label">1 — ${q.low}</span>
+          <span class="slider-label">${q.high} — 10</span>
+        </div>
+        <div class="slider-wrapper">
+          <input type="range" min="1" max="10" value="${currentScore}" id="slider-${q.id}"
+            oninput="updateScore('${q.id}', this.value)">
+        </div>
+        <div class="score-display">
+          <div class="score-number" id="score-display-${q.id}">${currentScore}</div>
+          <div class="score-label">Current Rating</div>
+        </div>
+        <div class="score-dots" id="dots-${q.id}">
+          ${Array.from({length: 10}, (_, i) => `<div class="score-dot ${i < currentScore ? 'active' : ''}" id="dot-${q.id}-${i+1}"></div>`).join('')}
+        </div>
+      </div>
+      <div class="q-nav">
+        ${index > 0 ? `<button class="btn-back" onclick="goBack()">← Back</button>` : ''}
+        <button class="btn-next" onclick="nextQuestion()">${index < questions.length - 1 ? 'Next →' : 'View Results'}</button>
+      </div>
+    `;
+
+    card.classList.remove('fade-in');
+    void card.offsetWidth;
+    card.classList.add('fade-in');
+  }
+
+  function updateScore(id, value) {
+    scores[id] = parseInt(value);
+    const display = document.getElementById('score-display-' + id);
+    if (display) display.textContent = value;
+
+    // Update dots
+    for (let i = 1; i <= 10; i++) {
+      const dot = document.getElementById('dot-' + id + '-' + i);
+      if (dot) dot.classList.toggle('active', i <= parseInt(value));
+    }
+
+    // Update gold color intensity
+    const num = parseInt(value);
+    if (display) {
+      display.style.color = num >= 7 ? '#5ce0a0' : num >= 4 ? '#c8a96a' : '#e05c5c';
+    }
+  }
+
+  function nextQuestion() {
+    if (currentQ < questions.length - 1) {
+      currentQ++;
+      renderQuestion(currentQ);
+    } else {
+      showResults();
+    }
+  }
+
+  function goBack() {
+    if (currentQ > 0) {
+      currentQ--;
+      renderQuestion(currentQ);
+    }
+  }
+
+  function showResults() {
+    const total = scores.a + scores.b + scores.c + scores.d;
+    const index = Math.round(total * 2.5);
+
+    showScreen('screen-results');
+
+    // Animate score number
+    setTimeout(() => {
+      document.getElementById('result-score-number').textContent = index;
+      document.getElementById('result-score-fill').style.width = index + '%';
+
+      // Color
+      const scoreEl = document.getElementById('result-score-number');
+      const fillEl = document.getElementById('result-score-fill');
+      const topBar = document.querySelector('#screen-results::before');
+
+      if (index >= 70) {
+        scoreEl.style.color = '#5ce0a0';
+        fillEl.style.background = '#5ce0a0';
+        document.getElementById('zone-sovereign').classList.add('active-zone');
+        document.getElementById('zone-sovereign').style.color = '#5ce0a0';
+        document.getElementById('zone-sovereign').style.borderTopColor = '#5ce0a0';
+      } else if (index >= 40) {
+        scoreEl.style.color = '#c8a96a';
+        fillEl.style.background = '#c8a96a';
+        document.getElementById('zone-armed').classList.add('active-zone');
+        document.getElementById('zone-armed').style.color = '#c8a96a';
+        document.getElementById('zone-armed').style.borderTopColor = '#c8a96a';
+      } else {
+        scoreEl.style.color = '#e05c5c';
+        fillEl.style.background = '#e05c5c';
+        document.getElementById('zone-critical').classList.add('active-zone');
+        document.getElementById('zone-critical').style.color = '#e05c5c';
+        document.getElementById('zone-critical').style.borderTopColor = '#e05c5c';
+      }
+
+      // Individual bars
+      setTimeout(() => {
+        ['a','b','c','d'].forEach(k => {
+          document.getElementById('bar-' + k).style.width = (scores[k] * 10) + '%';
+          document.getElementById('val-' + k).textContent = scores[k];
+          const val = scores[k];
+          document.getElementById('bar-' + k).style.background = val >= 7 ? '#5ce0a0' : val >= 4 ? '#c8a96a' : '#e05c5c';
+          document.getElementById('val-' + k).style.color = val >= 7 ? '#5ce0a0' : val >= 4 ? '#c8a96a' : '#e05c5c';
+        });
+      }, 300);
+
+    }, 200);
+
+    // Result content
+    let resultHTML = '';
+    let closeHTML = '';
+
+    if (index >= 70) {
+      resultHTML = `
+        <div class="result-status" style="color:#5ce0a0;border-color:#5ce0a0;">Status: Sovereignty in Expansion</div>
+        <div class="result-title">Your internal architecture is aligned.</div>
+        <p class="result-body">You are not operating from a position of defense but from deliberate choice. Your challenge is not dismantling — it is <strong>maintaining integrity under high pressure.</strong></p>
+        <p class="result-body">Entropy will always attempt to restore what you have worked to clear. The risk at this level is not collapse — it is the slow erosion of standards under the weight of external demands.</p>
+        <div class="sovereignty-note">
+          <div class="sovereignty-note-text">Even aligned architectures require maintenance. The Blind Spot Protocol gives you the framework to identify early-stage friction before it compounds — and to operate at your real level consistently, not only when conditions are favorable.</div>
+        </div>
+      `;
+      closeHTML = `
+        <div class="close-eyebrow">Blind Spot Protocol</div>
+        <div class="close-title">Maintain what you've built. Expand what's possible.</div>
+        <div class="close-body">The protocol gives you the complete technical architecture to audit your operating system, identify any remaining friction points, and build an internal structure that sustains high performance without requiring constant effort to maintain.</div>
+        <div class="protocol-details">
+          <div class="protocol-detail"><div class="pd-val">39</div><div class="pd-label">Pages</div></div>
+          <div class="protocol-detail"><div class="pd-val">4</div><div class="pd-label">Phases</div></div>
+          <div class="protocol-detail"><div class="pd-val">0</div><div class="pd-label">Generic advice</div></div>
+        </div>
+        <a href="https://blindspot.lemonsqueezy.com/checkout/buy/4bf53317-dbfc-450e-9a16-d8a2b2f712a3?embed=1&logo=0" class="btn-protocol lemonsqueezy-button">→ Access the Blind Spot Protocol</a>
+      `;
+    } else if (index >= 40) {
+      resultHTML = `
+        <div class="result-status" style="color:#c8a96a;border-color:#c8a96a;">Status: Armed Identity Detected</div>
+        <div class="result-title">Your intelligence is working against you.</div>
+        <p class="result-body">Not because you lack capability. Because <strong>a significant part of your cognitive bandwidth is being consumed by a defense structure you have never been able to see directly.</strong></p>
+        <p class="result-body">This is why strategies that work for others don't produce the same results for you. The input is correct. The layer is wrong.</p>
+        <p class="result-body">The structure is not a flaw. It was built for a reason — at a time when it made sense. The problem is that it has been running on autopilot ever since, and it has no mechanism to know when to stop.</p>
+      `;
+      closeHTML = `
+        <div class="close-eyebrow">What this means</div>
+        <div class="close-title">You are not the problem. The architecture is.</div>
+        <div class="close-body">An Armed Identity is a defense structure so well-integrated that your mind has filed it under <em>"personality"</em> — which is precisely why conventional approaches haven't moved the needle. You weren't applying the wrong effort. You were applying it to the wrong layer.<br><br>The structure has a precise architecture, a precise cost, and a precise dismantling procedure. But it cannot be diagnosed from the inside. <em>That is the nature of a blind spot.</em><br><br>The Blind Spot Protocol is a technical document — not a self-help framework — that gives you the exact map to identify your specific structure, understand what it has been protecting you from, and replace it with an internal architecture built for expansion rather than survival.</div>
+        <div class="protocol-details">
+          <div class="protocol-detail"><div class="pd-val">39</div><div class="pd-label">Pages</div></div>
+          <div class="protocol-detail"><div class="pd-val">4</div><div class="pd-label">Phases</div></div>
+          <div class="protocol-detail"><div class="pd-val">0</div><div class="pd-label">Generic advice</div></div>
+        </div>
+        <a href="https://blindspot.lemonsqueezy.com/checkout/buy/4bf53317-dbfc-450e-9a16-d8a2b2f712a3?embed=1&logo=0" class="btn-protocol lemonsqueezy-button">→ Access the Blind Spot Protocol</a>
+      `;
+    } else {
+      resultHTML = `
+        <div class="result-status" style="color:#e05c5c;border-color:#e05c5c;">Status: Critical Friction Overload</div>
+        <div class="result-title">The structure has been running the system for a long time.</div>
+        <p class="result-body">You are not failing to perform. <strong>You are performing inside a containment structure that was never designed to let you exceed it.</strong></p>
+        <p class="result-body">The cost shows up everywhere: in results that plateau just before the threshold, in energy that disappears when you get close to something that matters, in a persistent sense that the version of you capable of more exists — but is somehow unreachable.</p>
+        <p class="result-body">This is not a motivation problem. It is not a discipline problem. It is a structural problem — and it responds to a structural solution.</p>
+      `;
+      closeHTML = `
+        <div class="close-eyebrow">What this means</div>
+        <div class="close-title">The architecture is the intervention point.</div>
+        <div class="close-body">An Armed Identity is a defense structure so well-integrated that your mind has filed it under <em>"personality"</em> — which is precisely why conventional approaches haven't moved the needle. You weren't applying the wrong effort. You were applying it to the wrong layer.<br><br>The structure has a precise architecture, a precise cost, and a precise dismantling procedure. But it cannot be diagnosed from the inside. <em>That is the nature of a blind spot.</em><br><br>The Blind Spot Protocol is a technical document — not a self-help framework — that gives you the exact map to identify your specific structure, understand what it has been protecting you from, and replace it with an internal architecture built for expansion rather than survival.</div>
+        <div class="protocol-details">
+          <div class="protocol-detail"><div class="pd-val">39</div><div class="pd-label">Pages</div></div>
+          <div class="protocol-detail"><div class="pd-val">4</div><div class="pd-label">Phases</div></div>
+          <div class="protocol-detail"><div class="pd-val">0</div><div class="pd-label">Generic advice</div></div>
+        </div>
+        <a href="https://blindspot.lemonsqueezy.com/checkout/buy/4bf53317-dbfc-450e-9a16-d8a2b2f712a3?embed=1&logo=0" class="btn-protocol lemonsqueezy-button">→ Access the Blind Spot Protocol</a>
+      `;
+    }
+
+    document.getElementById('result-content').innerHTML = resultHTML;
+    document.getElementById('result-close').innerHTML = closeHTML;
+  }
+</script>
+</body>
+</html>
